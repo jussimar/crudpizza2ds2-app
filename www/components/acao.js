@@ -46,3 +46,81 @@ function carregaLista(){
       }
     });
 }
+
+
+$(document).on("change","#lista",function(){
+    var parametro ={
+      "codigo":$("option:selected",("#lista")).val()
+    };
+    
+    $.ajax({
+      type:"post",//como vou enviar os dados ao servidor
+      url:"https://appmobile3i2.000webhostapp.com/listar-um.php",//para onde vou enviar
+      data:parametro,
+      dataType:"json",
+      //caso esteja tudo certo executa esse codigo
+      success: function(data){
+        $("#codigo").val(data.pizza.codigo);
+        $("#sabor").val(data.pizza.sabor);
+        $("#valor").val(data.pizza.valor)
+      },
+      //caso algo esteja errado executa esse codigo
+      error: function(data){
+        navigator.notification.alert("Erro ao buscar registros!");
+      }
+    });
+});
+
+$(document).on("click","#editar",function(){
+  $("#sabor").prop("readonly", false);
+  $("#valor").prop("readonly", false);     
+});
+
+$(document).on("click","#cancEdit",function(){
+  $("#sabor").val("");
+  $("#valor").val("");
+  $("#sabor").prop("readonly", true);
+  $("#valor").prop("readonly", true);     
+});
+
+$(document).on("click", "#salEdit", function(){
+   var parametros ={
+      "codigo":$("#codigo").val(),
+      "sabor":$("#sabor").val(),
+      "valor":$("#valor").val()
+    };
+
+    $.ajax({
+      type:"post",//como vou enviar os dados ao servidor
+      url:"https://appmobile3i2.000webhostapp.com/altera.php",//para onde vou enviar
+      data:parametros,//o que eu vou enviar
+      //caso esteja tudo certo executa esse codigo
+      success: function(data){
+        navigator.notification.alert(data);
+        location.reload();
+      },
+      error: function(data){
+        navigator.notification.alert("Erro ao cadastrar!");
+      }
+    });
+});
+
+$(document).on("click", "#deletar", function(){
+   var parametro ={
+      "codigo":$("#codigo").val()
+    };
+
+    $.ajax({
+      type:"post",//como vou enviar os dados ao servidor
+      url:"https://appmobile3i2.000webhostapp.com/deletar.php",//para onde vou enviar
+      data:parametro,//o que eu vou enviar
+      //caso esteja tudo certo executa esse codigo
+      success: function(data){
+        navigator.notification.alert(data);
+        location.reload();
+      },
+      error: function(data){
+        navigator.notification.alert("Erro ao cadastrar!");
+      }
+    });
+});
